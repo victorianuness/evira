@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Técnico: TypeScript, NestJS & React</title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Space Grotesk, Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- React & ReactDOM via CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  
+  <!-- Babel Standalone para transpilar JSX no navegador -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: '#0B0D10',
+            surface: '#12161D',
+            panel: '#171C26',
+            ts: '#3178C6',
+            nest: '#E0234E',
+            react: '#00D8FF',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-obsidian: #0B0D10;
+      --bg-surface: #12161D;
+      --border-grid: rgba(148, 163, 184, 0.14);
+      --border-strong: #2B3445;
+      --accent-ts: #3178C6;
+      --accent-nest: #E0234E;
+      --accent-react: #00D8FF;
+    }
+
+    body {
+      background-color: var(--bg-obsidian);
+      color: #F1F5F9;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      /* Textura autoral: Blueprint Grid duplo + pontos técnicos */
+      background-image: 
+        radial-gradient(rgba(0, 216, 255, 0.12) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 32px 32px, 128px 128px, 128px 128px;
+      background-position: -1px -1px, 0 0, 0 0;
+    }
+
+    /* Cartão Neo-Brutalista Técnico com sombra sólida offset */
+    .blueprint-card {
+      background: linear-gradient(180deg, #141922 0%, #10141C 100%);
+      border: 1.5px solid #2D3748;
+      box-shadow: 6px 6px 0px #050608, 6px 6px 0px 1px #2D3748;
+      position: relative;
+    }
+
+    /* Detalhes de mira/canto técnico (Crosshairs) */
+    .corner-ticks::before,
+    .corner-ticks::after {
+      content: '';
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+    }
+    .corner-ticks::before {
+      top: -1.5px;
+      left: -1.5px;
+      border-top: 2px solid #00D8FF;
+      border-left: 2px solid #00D8FF;
+    }
+    .corner-ticks::after {
+      bottom: -1.5px;
+      right: -1.5px;
+      border-bottom: 2px solid #E0234E;
+      border-right: 2px solid #E0234E;
+    }
+
+    /* Botão Principal com deslocamento físico ao clicar */
+    .btn-cyber {
+      background: #F8FAFC;
+      color: #0B0D10;
+      border: 1.5px solid #F8FAFC;
+      box-shadow: 4px 4px 0px #00D8FF;
+      transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.14s ease, background-color 0.14s ease;
+    }
+    .btn-cyber:hover:not(:disabled) {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #00D8FF;
+      background: #FFFFFF;
+    }
+    .btn-cyber:active:not(:disabled) {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #00D8FF;
+    }
+    .btn-cyber:disabled {
+      background: #1E2532;
+      border-color: #2D3748;
+      color: #64748B;
+      box-shadow: none;
+    }
+
+    /* Botão Secundário Blueprint */
+    .btn-outline-cyber {
+      background: #12161D;
+      color: #E2E8F0;
+      border: 1.5px solid #334155;
+      box-shadow: 3px 3px 0px #06080A;
+      transition: all 0.14s ease;
+    }
+    .btn-outline-cyber:hover:not(:disabled) {
+      border-color: #94A3B8;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #334155;
+    }
+
+    /* Alternativas Interativas */
+    .option-tile {
+      background: #0E1218;
+      border: 1.5px solid #252E3D;
+      transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+    .option-tile:hover {
+      border-color: #475569;
+      background: #141A23;
+      transform: translateX(4px);
+    }
+    .option-tile-selected-ts {
+      background: rgba(49, 120, 198, 0.14);
+      border-color: #3178C6;
+      box-shadow: 4px 4px 0px #3178C6;
+      transform: translate(-2px, -2px);
+    }
+    .option-tile-selected-nest {
+      background: rgba(224, 35, 78, 0.14);
+      border-color: #E0234E;
+      box-shadow: 4px 4px 0px #E0234E;
+      transform: translate(-2px, -2px);
+    }
+    .option-tile-selected-react {
+      background: rgba(0, 216, 255, 0.12);
+      border-color: #00D8FF;
+      box-shadow: 4px 4px 0px #00D8FF;
+      transform: translate(-2px, -2px);
+    }
+
+    /* Animação de entrada */
+    .fade-in {
+      animation: slideReveal 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideReveal {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Scrollbar customizada */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0B0D10; }
+    ::-webkit-scrollbar-thumb { background: #2D3748; border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-obsidian text-slate-100 selection:bg-react selection:text-obsidian">
+  
+  <div id="root" class="flex-grow flex flex-col"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    // Banco de 20 questões técnicas (TypeScript, NestJS e React)
+    const QUESTIONS_DATA = [
+      // --- TYPESCRIPT (7 questões) ---
+      {
+        id: 1,
+        category: "TypeScript",
+        question: "Qual é a principal diferença entre 'interface' e 'type' (Type Alias) no TypeScript moderno?",
+        options: [
+          "Interfaces não suportam propriedades opcionais, enquanto types suportam.",
+          "Interfaces permitem Declaration Merging (fusão de declarações com o mesmo nome), enquanto types não.",
+          "Types só podem representar tipos primitivos e nunca objetos.",
+          "Interfaces são compiladas para classes JavaScript em tempo de execução.",
+          "Não existe nenhuma diferença técnica ou semântica entre os dois."
+        ],
+        correctIndex: 1,
+        explanation: "Interfaces podem ser declaradas múltiplas vezes no mesmo escopo e o TypeScript funde suas propriedades (Declaration Merging), o que é útil para estender tipos de bibliotecas."
+      },
+      {
+        id: 2,
+        category: "TypeScript",
+        question: "Para que serve o Utility Type 'Partial<T>' no TypeScript?",
+        options: [
+          "Torna todas as propriedades do tipo T obrigatórias.",
+          "Remove todas as propriedades nulas ou indefinidas de T.",
+          "Constrói um tipo com todas as propriedades de T definidas como opcionais.",
+          "Extrai apenas os métodos públicos de uma classe T.",
+          "Converte todas as propriedades de T em somente leitura (readonly)."
+        ],
+        correctIndex: 2,
+        explanation: "Partial<T> transforma todas as propriedades do tipo T em opcionais (?), sendo muito usado em operações de atualização parcial (PATCH/UPDATE)."
+      },
+      {
+        id: 3,
+        category: "TypeScript",
+        question: "Qual é a vantagem de utilizar o tipo 'unknown' em vez de 'any' quando não sabemos o tipo de um dado externo?",
+        options: [
+          "O tipo 'unknown' permite chamar qualquer método diretamente sem verificação.",
+          "O tipo 'unknown' exige verificação ou narrowing de tipo antes de realizar operações com o valor.",
+          "O tipo 'unknown' é convertido automaticamente para string em tempo de execução.",
+          "O tipo 'unknown' ignora erros de sintaxe no arquivo inteiro.",
+          "Não há diferença; 'unknown' é apenas um apelido depreciado para 'any'."
+        ],
+        correctIndex: 1,
+        explanation: "'unknown' é a contraparte type-safe do 'any'. Você pode atribuir qualquer valor a ele, mas não pode acessar propriedades ou invocá-lo sem antes validar seu tipo."
+      },
+      {
+        id: 4,
+        category: "TypeScript",
+        question: "O que o operador 'keyof' retorna quando aplicado a um tipo de objeto 'User'?",
+        options: [
+          "Um array em tempo de execução contendo os valores das propriedades de User.",
+          "Uma union type literal contendo os nomes (chaves) das propriedades públicas de User.",
+          "O número total de propriedades definidas na interface User.",
+          "Uma cópia profunda (deep clone) da estrutura do tipo User.",
+          "Um booleano indicando se User possui propriedades privadas."
+        ],
+        correctIndex: 1,
+        explanation: "O operador 'keyof T' produz uma união de strings ou símbolos literais representando todas as chaves conhecidas de T."
+      },
+      {
+        id: 5,
+        category: "TypeScript",
+        question: "Qual recurso do TypeScript permite criar componentes, funções e classes reutilizáveis que preservam a tipagem de entrada na saída?",
+        options: [
+          "Decorators",
+          "Namespaces",
+          "Generics (<T>)",
+          "Mixins",
+          "Enums"
+        ],
+        correctIndex: 2,
+        explanation: "Generics (<T>) funcionam como variáveis de tipo, permitindo criar estruturas flexíveis sem perder a segurança de tipos (type safety)."
+      },
+      {
+        id: 6,
+        category: "TypeScript",
+        question: "O que faz o modificador 'readonly' em uma propriedade de interface ou classe no TypeScript?",
+        options: [
+          "Criptografa o valor da propriedade na memória.",
+          "Impede que a propriedade seja reatribuída após a sua inicialização durante a verificação de tipos.",
+          "Torna a propriedade privada e inacessível fora da classe.",
+          "Garante que objetos aninhados dentro da propriedade sejam profundamente imutáveis em runtime.",
+          "Exporta a propriedade automaticamente para outros módulos."
+        ],
+        correctIndex: 1,
+        explanation: "'readonly' garante em tempo de compilação que a referência da propriedade não seja alterada após a inicialização."
+      },
+      {
+        id: 7,
+        category: "TypeScript",
+        question: "Qual é a função de um 'Type Guard' (como o operador 'typeof', 'instanceof' ou predicados 'x is Tipo')?",
+        options: [
+          "Bloquear requisições HTTP não autenticadas no backend.",
+          "Restringir (narrow) um tipo mais amplo (como union types) para um tipo mais específico dentro de um bloco condicional.",
+          "Converter código TypeScript diretamente para WebAssembly.",
+          "Remover comentários e espaços em branco durante o build.",
+          "Gerar documentação automática em Swagger/OpenAPI."
+        ],
+        correctIndex: 1,
+        explanation: "Type Guards permitem que o compilador do TypeScript entenda qual é o tipo específico de uma variável dentro de um bloco if/switch."
+      },
+
+      // --- NESTJS (7 questões) ---
+      {
+        id: 8,
+        category: "NestJS",
+        question: "Qual padrão arquitetural é a base central do NestJS para gerenciar dependências entre Services, Controllers e outros componentes?",
+        options: [
+          "Singleton Manual Global",
+          "Injeção de Dependência (Dependency Injection) e Inversão de Controle (IoC)",
+          "Event Sourcing Puro",
+          "Active Record Pattern obrigatório",
+          "Observer Pattern sem decoradores"
+        ],
+        correctIndex: 1,
+        explanation: "O NestJS possui um container de IoC integrado que gerencia a instanciação e injeção de dependências (Providers) automaticamente via construtor."
+      },
+      {
+        id: 9,
+        category: "NestJS",
+        question: "Qual é a responsabilidade principal de um 'Controller' no NestJS?",
+        options: [
+          "Executar queries SQL diretamente no banco de dados.",
+          "Gerenciar variáveis de ambiente e conexões WebSocket exclusivamente.",
+          "Receber requisições HTTP de entrada, extrair parâmetros e retornar respostas ao cliente.",
+          "Compilar arquivos TypeScript para JavaScript.",
+          "Armazenar o estado global da aplicação em memória."
+        ],
+        correctIndex: 2,
+        explanation: "Controllers são responsáveis por lidar com as rotas HTTP (@Get, @Post, etc.), delegando regras de negócio complexas para os Services."
+      },
+      {
+        id: 10,
+        category: "NestJS",
+        question: "Qual decorator é utilizado para marcar uma classe como um Provider que pode ser gerenciado pelo sistema de injeção de dependência do NestJS?",
+        options: [
+          "@Module()",
+          "@Controller()",
+          "@Injectable()",
+          "@InjectRepository()",
+          "@Component()"
+        ],
+        correctIndex: 2,
+        explanation: "O decorator @Injectable() anexa metadados que informam ao NestJS que a classe pode ser instanciada e injetada pelo container IoC."
+      },
+      {
+        id: 11,
+        category: "NestJS",
+        question: "No ciclo de vida de uma requisição no NestJS, qual componente é comumente utilizado para validar e transformar dados de entrada (como DTOs)?",
+        options: [
+          "Guards",
+          "Pipes (ex: ValidationPipe)",
+          "Interceptors",
+          "Exception Filters",
+          "Middlewares"
+        ],
+        correctIndex: 1,
+        explanation: "Pipes operam nos argumentos enviados ao handler da rota, sendo ideais para transformação de tipos (ParseIntPipe) e validação de DTOs (ValidationPipe)."
+      },
+      {
+        id: 12,
+        category: "NestJS",
+        question: "Qual é a principal finalidade de um 'Guard' (ex: AuthGuard) no NestJS?",
+        options: [
+          "Formatar o JSON de saída antes de enviar ao cliente.",
+          "Capturar exceções não tratadas e retornar status HTTP 500.",
+          "Determinar se uma requisição deve ou não ser processada pelo handler da rota com base em permissões/autenticação.",
+          "Realizar cache de respostas no Redis.",
+          "Mapear entidades do TypeORM para tabelas."
+        ],
+        correctIndex: 2,
+        explanation: "Guards têm uma responsabilidade única: autorização/autenticação. Eles retornam um booleano indicando se a requisição pode prosseguir."
+      },
+      {
+        id: 13,
+        category: "NestJS",
+        question: "Como o NestJS organiza a estrutura modular da aplicação e encapsula providers?",
+        options: [
+          "Através de arquivos package.json aninhados.",
+          "Através de classes decoradas com @Module(), definindo imports, controllers, providers e exports.",
+          "Por meio de convenção rígida de nomes de pastas sem decorators.",
+          "Usando apenas funções exportadas em um único arquivo main.ts.",
+          "Através de XML de configuração."
+        ],
+        correctIndex: 1,
+        explanation: "Módulos (@Module) organizam o código em domínios coesos. Para que um provider seja usado em outro módulo, ele precisa ser listado em 'exports'."
+      },
+      {
+        id: 14,
+        category: "NestJS",
+        question: "Qual recurso do NestJS permite interceptar a execução antes e depois do método do controller, permitindo transformar a resposta ou medir o tempo de execução?",
+        options: [
+          "Pipes",
+          "Interceptors (baseados em RxJS Observables)",
+          "DTOs",
+          "Guards",
+          "Entities"
+        ],
+        correctIndex: 1,
+        explanation: "Interceptors envolvem a execução da requisição/resposta utilizando RxJS, permitindo logging, transformação de resposta e tratamento de timeout."
+      },
+
+      // --- REACT (6 questões) ---
+      {
+        id: 15,
+        category: "React",
+        question: "Qual é o comportamento correto do hook 'useEffect' quando passado um array de dependências vazio '[]'?",
+        options: [
+          "Executa o efeito a cada nova renderização do componente.",
+          "Nunca executa o efeito, nem mesmo na montagem.",
+          "Executa o efeito apenas uma vez após a montagem inicial do componente (mount).",
+          "Executa o efeito apenas quando o usuário clica em algum botão.",
+          "Causa um erro de compilação no React 18+."
+        ],
+        correctIndex: 2,
+        explanation: "Um array de dependências vazio [] indica que o efeito não depende de nenhum valor de props ou state, rodando apenas uma vez na montagem (e limpando no unmount)."
+      },
+      {
+        id: 16,
+        category: "React",
+        question: "Por que não devemos modificar o estado diretamente no React (ex: state.count = 5) em vez de usar a função atualizadora (setState)?",
+        options: [
+          "Porque o JavaScript proíbe mutação de objetos em modo estrito.",
+          "Porque a mutação direta não dispara uma nova renderização (re-render) e quebra a imutabilidade esperada pelo React.",
+          "Porque o método setState salva os dados automaticamente no localStorage.",
+          "Porque modificar diretamente apaga o Virtual DOM inteiro.",
+          "Porque apenas variáveis globais podem ser alteradas diretamente."
+        ],
+        correctIndex: 1,
+        explanation: "O React compara referências de estado para saber quando atualizar a interface. Chamar a função setter agenda a re-renderização com o novo estado."
+      },
+      {
+        id: 17,
+        category: "React",
+        question: "Qual é a importância da prop 'key' ao renderizar listas de elementos com '.map()' no React?",
+        options: [
+          "Serve para aplicar estilos CSS automaticamente aos itens ímpares.",
+          "Ajuda o algoritmo de reconciliação do React a identificar quais itens foram alterados, adicionados ou removidos com eficiência.",
+          "É obrigatória apenas quando a lista tem mais de 100 itens.",
+          "Define a ordem alfabética de exibição dos elementos na tela.",
+          "Envia o identificador único automaticamente para o backend."
+        ],
+        correctIndex: 1,
+        explanation: "Keys estáveis e únicas permitem que o React preserve o estado interno dos componentes da lista e evite recriações desnecessárias no DOM."
+      },
+      {
+        id: 18,
+        category: "React",
+        question: "Qual hook do React é indicado para memorizar o resultado de um cálculo computacionalmente caro entre renderizações?",
+        options: [
+          "useRef",
+          "useMemo",
+          "useContext",
+          "useReducer",
+          "useLayoutEffect"
+        ],
+        correctIndex: 1,
+        explanation: "useMemo armazena em cache o resultado de uma função e só o recalcula quando uma de suas dependências sofrer alteração."
+      },
+      {
+        id: 19,
+        category: "React",
+        question: "Sobre o hook 'useRef', qual afirmação é verdadeira?",
+        options: [
+          "Alterar 'ref.current' dispara imediatamente uma nova renderização do componente.",
+          "Pode ser usado tanto para acessar elementos do DOM diretamente quanto para guardar valores mutáveis que persistem entre renderizações sem causar re-render.",
+          "Só pode ser utilizado em componentes de classe.",
+          "Substitui completamente a necessidade de usar useState.",
+          "É apagado toda vez que o componente recebe novas props."
+        ],
+        correctIndex: 1,
+        explanation: "useRef retorna um objeto mutável { current: initialValue } que permanece o mesmo durante todo o ciclo de vida do componente sem provocar re-renderizações."
+      },
+      {
+        id: 20,
+        category: "React",
+        question: "O que significa o conceito de 'Lifting State Up' (Elevar o Estado) no React?",
+        options: [
+          "Mover todos os estados da aplicação para variáveis globais fora do React.",
+          "Mover o estado compartilhado para o ancestral comum mais próximo dos componentes que precisam sincronizar esses dados.",
+          "Salvar todos os formulários na nuvem antes de validar.",
+          "Converter componentes funcionais em componentes de classe.",
+          "Utilizar apenas CSS Grid para posicionar elementos no topo da tela."
+        ],
+        correctIndex: 1,
+        explanation: "Como o fluxo de dados no React é unidirecional (top-down), elevar o estado ao ancestral comum permite compartilhar e sincronizar dados entre componentes irmãos via props."
+      }
+    ];
+
+    const PASSING_PERCENTAGE = 70;
+    const MIN_CORRECT_ANSWERS = Math.ceil((QUESTIONS_DATA.length * PASSING_PERCENTAGE) / 100); // 14 de 20
+    const OPTION_LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+    // Configuração visual temática por tecnologia
+    const TECH_THEME = {
+      TypeScript: {
+        badge: "bg-[#3178C6]/15 text-[#66A8F5] border-[#3178C6]/60",
+        dot: "bg-[#3178C6]",
+        bar: "bg-[#3178C6]",
+        selectedTile: "option-tile-selected-ts",
+        selectedLetter: "bg-[#3178C6] text-white border-[#3178C6]",
+        code: "TS // STATIC_TYPES"
+      },
+      NestJS: {
+        badge: "bg-[#E0234E]/15 text-[#FF6B8B] border-[#E0234E]/60",
+        dot: "bg-[#E0234E]",
+        bar: "bg-[#E0234E]",
+        selectedTile: "option-tile-selected-nest",
+        selectedLetter: "bg-[#E0234E] text-white border-[#E0234E]",
+        code: "NEST // MODULAR_ARCH"
+      },
+      React: {
+        badge: "bg-[#00D8FF]/15 text-[#5CE6FF] border-[#00D8FF]/60",
+        dot: "bg-[#00D8FF]",
+        bar: "bg-[#00D8FF]",
+        selectedTile: "option-tile-selected-react",
+        selectedLetter: "bg-[#00D8FF] text-[#0B0D10] border-[#00D8FF]",
+        code: "REACT // UI_ENGINE"
+      }
+    };
+
+    // Badge de Categoria Estilo Blueprint
+    function CategoryBadge({ category, showTagCode = false }) {
+      const theme = TECH_THEME[category] || TECH_THEME.TypeScript;
+      return (
+        <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-sm text-xs font-mono font-semibold uppercase tracking-wider border ${theme.badge}`}>
+          <span className={`w-2 h-2 rounded-xs ${theme.dot}`}></span>
+          <span>{category}</span>
+          {showTagCode && (
+            <span className="opacity-60 hidden sm:inline">| {theme.code.split('// ')[1]}</span>
+          )}
+        </span>
+      );
+    }
+
+    function App() {
+      // Estados principais da aplicação
+      const [screen, setScreen] = useState('start'); // 'start' | 'quiz' | 'result'
+      const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+      const [userAnswers, setUserAnswers] = useState({}); // { [questionId]: optionIndex }
+      const [showReview, setShowReview] = useState(false);
+
+      const totalQuestions = QUESTIONS_DATA.length;
+      const currentQuestion = QUESTIONS_DATA[currentQuestionIndex];
+      const answeredCount = Object.keys(userAnswers).length;
+
+      // Inicia ou reinicia o quiz
+      const handleStartQuiz = () => {
+        setUserAnswers({});
+        setCurrentQuestionIndex(0);
+        setShowReview(false);
+        setScreen('quiz');
+      };
+
+      // Registra a resposta da questão atual
+      const handleSelectOption = (optionIndex) => {
+        setUserAnswers((prev) => ({
+          ...prev,
+          [currentQuestion.id]: optionIndex
+        }));
+      };
+
+      // Navegação entre questões
+      const handleNext = () => {
+        if (currentQuestionIndex < totalQuestions - 1) {
+          setCurrentQuestionIndex((prev) => prev + 1);
+        } else {
+          setScreen('result');
+        }
+      };
+
+      const handlePrevious = () => {
+        if (currentQuestionIndex > 0) {
+          setCurrentQuestionIndex((prev) => prev - 1);
+        }
+      };
+
+      // Cálculo de pontuação e desempenho por tecnologia
+      const results = useMemo(() => {
+        let score = 0;
+        const byCategory = {
+          TypeScript: { correct: 0, total: 0 },
+          NestJS: { correct: 0, total: 0 },
+          React: { correct: 0, total: 0 }
+        };
+
+        QUESTIONS_DATA.forEach((q) => {
+          byCategory[q.category].total += 1;
+          if (userAnswers[q.id] === q.correctIndex) {
+            score += 1;
+            byCategory[q.category].correct += 1;
+          }
+        });
+
+        const percentage = Math.round((score / totalQuestions) * 100);
+        const passed = score >= MIN_CORRECT_ANSWERS;
+
+        return { score, percentage, passed, byCategory };
+      }, [userAnswers, totalQuestions]);
+
+      const activeTheme = currentQuestion ? TECH_THEME[currentQuestion.category] : TECH_THEME.TypeScript;
+
+      return (
+        <div className="min-h-screen flex flex-col">
+          {/* Cabeçalho Superior Técnico */}
+          <header className="bg-[#0B0D10]/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-20">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-sm bg-[#141922] border border-slate-700 text-react flex items-center justify-center font-mono font-bold text-sm shadow-[3px_3px_0px_#3178C6]">
+                  &lt;/&gt;
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="font-display font-bold text-white text-sm sm:text-base tracking-tight uppercase">
+                      Spec.Quiz // Fullstack
+                    </h1>
+                    <span className="hidden md:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700 rounded-xs">
+                      v2.6
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-mono text-slate-400">
+                    TS • NESTJS • REACT
+                  </p>
+                </div>
+              </div>
+
+              {screen === 'quiz' && (
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-mono text-slate-400 hidden sm:inline">
+                    RESPONDIDAS: <strong className="text-white">{String(answeredCount).padStart(2, '0')}</strong>/{totalQuestions}
+                  </span>
+                  <span className="px-3 py-1 rounded-sm bg-[#161C26] border border-slate-700 text-react font-mono text-xs font-bold">
+                    Q.{String(currentQuestionIndex + 1).padStart(2, '0')} / {totalQuestions}
+                  </span>
+                </div>
+              )}
+            </div>
+          </header>
+
+          {/* Conteúdo Principal */}
+          <main className="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col justify-center">
+            
+            {/* TELA 1: INÍCIO */}
+            {screen === 'start' && (
+              <div className="blueprint-card corner-ticks rounded-sm p-6 sm:p-10 fade-in">
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-6 mb-6 border-b border-slate-800/90">
+                  <div className="flex flex-wrap gap-2">
+                    <CategoryBadge category="TypeScript" />
+                    <CategoryBadge category="NestJS" />
+                    <CategoryBadge category="React" />
+                  </div>
+                  <span className="font-mono text-xs text-slate-400">
+                    MODULE_ID: EXAM-20Q
+                  </span>
+                </div>
+
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white tracking-tight leading-tight mb-4">
+                  Avaliação Técnica de Arquitetura &amp; Tipagem Moderna
+                </h2>
+                <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl">
+                  Valide seu domínio em tipagem estática avançada com <span className="text-[#66A8F5] font-medium">TypeScript</span>, injeção de dependência e arquitetura modular com <span className="text-[#FF6B8B] font-medium">NestJS</span>, e renderização reativa com <span className="text-[#5CE6FF] font-medium">React</span>.
+                </p>
+
+                {/* Grid de Especificações Técnicas */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                  <div className="p-4 rounded-sm bg-[#0C0F14] border border-slate-800 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-0.5 bg-ts"></div>
+                    <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1">
+                      01 // Escopo
+                    </div>
+                    <div className="font-display text-2xl font-bold text-white">
+                      {totalQuestions} Questões
+                    </div>
+                    <div className="text-xs font-mono text-slate-400 mt-1">
+                      7 TS • 7 NestJS • 6 React
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-sm bg-[#0C0F14] border border-slate-800 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-0.5 bg-emerald-400"></div>
+                    <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1">
+                      02 // Nota de Corte
+                    </div>
+                    <div className="font-display text-2xl font-bold text-emerald-400">
+                      Mínimo {PASSING_PERCENTAGE}%
+                    </div>
+                    <div className="text-xs font-mono text-slate-400 mt-1">
+                      {MIN_CORRECT_ANSWERS} de {totalQuestions} acertos exigidos
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-sm bg-[#0C0F14] border border-slate-800 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-0.5 bg-react"></div>
+                    <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400 mb-1">
+                      03 // Diagnóstico
+                    </div>
+                    <div className="font-display text-2xl font-bold text-white">
+                      Gabarito
+                    </div>
+                    <div className="text-xs font-mono text-slate-400 mt-1">
+                      Análise técnica comentada
+                    </div>
+                  </div>
+                </div>
+
+                {/* Protocolo da Avaliação */}
+                <div className="bg-[#0C0F14] border-l-4 border-react p-5 mb-8">
+                  <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-react mb-3">
+                    &gt; Protocolo de Execução:
+                  </h3>
+                  <ul className="space-y-2 text-sm text-slate-300 font-mono">
+                    <li className="flex items-start gap-2">
+                      <span className="text-react">[+]</span>
+                      <span>5 alternativas (A–E) por questão, com <strong className="text-white">única resposta correta</strong>.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-react">[+]</span>
+                      <span>Navegação livre entre questões anteriores e próximas antes da submissão.</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-react">[+]</span>
+                      <span>Pontuação unitária (1.0 pt/acerto) com relatório de aprovação imediato.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleStartQuiz}
+                    className="btn-cyber w-full sm:w-auto px-8 py-4 rounded-sm font-display font-bold text-base uppercase tracking-wider cursor-pointer flex items-center justify-center gap-3"
+                  >
+                    <span>Iniciar Avaliação</span>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* TELA 2: QUIZ EM ANDAMENTO */}
+            {screen === 'quiz' && (
+              <div className="fade-in">
+                {/* Barra de Progresso Segmentada por Tecnologia (20 blocos) */}
+                <div className="mb-6 bg-[#11151D] border border-slate-800 p-3.5 rounded-sm">
+                  <div className="flex justify-between items-center text-xs font-mono text-slate-400 mb-2.5">
+                    <span>PROGRESSO DA SESSÃO // {activeTheme.code}</span>
+                    <span className="text-white font-bold">
+                      {Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)}%
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-20 gap-1" style={{ gridTemplateColumns: 'repeat(20, minmax(0, 1fr))' }}>
+                    {QUESTIONS_DATA.map((q, idx) => {
+                      const qTheme = TECH_THEME[q.category];
+                      const isAnswered = userAnswers[q.id] !== undefined;
+                      const isCurrent = idx === currentQuestionIndex;
+                      return (
+                        <button
+                          key={q.id}
+                          type="button"
+                          onClick={() => setCurrentQuestionIndex(idx)}
+                          title={`Questão ${idx + 1} (${q.category})`}
+                          className={`h-2.5 rounded-[1px] transition-all cursor-pointer ${
+                            isCurrent
+                              ? "bg-white scale-y-125 shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                              : isAnswered
+                              ? qTheme.bar
+                              : "bg-slate-800 hover:bg-slate-700"
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Card da Questão */}
+                <div className="blueprint-card corner-ticks rounded-sm p-6 sm:p-8">
+                  <div className="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-800">
+                    <CategoryBadge category={currentQuestion.category} showTagCode={true} />
+                    <span className="text-xs font-mono text-slate-400 bg-[#0B0D10] px-2.5 py-1 border border-slate-800 rounded-xs">
+                      INDEX #{String(currentQuestion.id).padStart(2, '0')}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-white leading-snug mb-7">
+                    <span className="font-mono text-slate-500 mr-2">
+                      {String(currentQuestionIndex + 1).padStart(2, '0')}.
+                    </span>
+                    {currentQuestion.question}
+                  </h3>
+
+                  {/* Lista de 5 Alternativas */}
+                  <div className="space-y-3" role="radiogroup" aria-label="Alternativas da questão">
+                    {currentQuestion.options.map((optionText, idx) => {
+                      const isSelected = userAnswers[currentQuestion.id] === idx;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleSelectOption(idx)}
+                          className={`option-tile w-full text-left p-4 rounded-sm flex items-start gap-4 cursor-pointer ${
+                            isSelected ? activeTheme.selectedTile : ""
+                          }`}
+                        >
+                          <span
+                            className={`w-8 h-8 rounded-xs border flex items-center justify-center font-mono text-xs font-bold shrink-0 mt-0.5 transition-colors ${
+                              isSelected
+                                ? activeTheme.selectedLetter
+                                : "bg-[#161C26] text-slate-400 border-slate-700"
+                            }`}
+                          >
+                            {OPTION_LETTERS[idx]}
+                          </span>
+                          <span className={`text-sm sm:text-base leading-relaxed ${isSelected ? "font-medium text-white" : "text-slate-300"}`}>
+                            {optionText}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Navegação Inferior */}
+                  <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={handlePrevious}
+                      disabled={currentQuestionIndex === 0}
+                      className="btn-outline-cyber w-full sm:w-auto px-5 py-2.5 rounded-sm font-mono text-xs font-semibold uppercase tracking-wider disabled:opacity-35 disabled:pointer-events-none cursor-pointer"
+                    >
+                      &lt;- Anterior
+                    </button>
+
+                    <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
+                      {userAnswers[currentQuestion.id] === undefined && (
+                        <span className="text-xs font-mono text-amber-400 hidden sm:inline">
+                          [!] Selecione uma opção
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={handleNext}
+                        disabled={userAnswers[currentQuestion.id] === undefined}
+                        className="btn-cyber w-full sm:w-auto px-6 py-3 rounded-sm font-display font-bold text-sm uppercase tracking-wider disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        {currentQuestionIndex === totalQuestions - 1
+                          ? "Finalizar & Calcular ->"
+                          : "Próxima Questão ->"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Matriz de Navegação Rápida */}
+                <div className="mt-6 bg-[#11151D] rounded-sm border border-slate-800 p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-xs font-mono uppercase tracking-wider text-slate-400">
+                      Mapa de Questões // Acesso Direto
+                    </p>
+                    <div className="flex items-center gap-3 text-[11px] font-mono text-slate-400">
+                      <span className="flex items-center gap-1"><span className="w-2 h-2 bg-ts inline-block"></span>TS</span>
+                      <span className="flex items-center gap-1"><span className="w-2 h-2 bg-nest inline-block"></span>Nest</span>
+                      <span className="flex items-center gap-1"><span className="w-2 h-2 bg-react inline-block"></span>React</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {QUESTIONS_DATA.map((q, idx) => {
+                      const isAnswered = userAnswers[q.id] !== undefined;
+                      const isCurrent = idx === currentQuestionIndex;
+                      const qTheme = TECH_THEME[q.category];
+                      return (
+                        <button
+                          key={q.id}
+                          onClick={() => setCurrentQuestionIndex(idx)}
+                          className={`w-9 h-9 rounded-xs font-mono text-xs font-bold border transition-all cursor-pointer ${
+                            isCurrent
+                              ? "bg-white text-obsidian border-white shadow-[2px_2px_0px_#00D8FF]"
+                              : isAnswered
+                              ? `${qTheme.badge}`
+                              : "bg-[#0B0D10] text-slate-500 border-slate-800 hover:border-slate-600"
+                          }`}
+                          title={`Questão ${idx + 1} (${q.category})`}
+                        >
+                          {String(idx + 1).padStart(2, '0')}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TELA 3: RESULTADO E REVISÃO */}
+            {screen === 'result' && (
+              <div className="space-y-6 fade-in">
+                {/* Card Principal de Resultado */}
+                <div className="blueprint-card corner-ticks rounded-sm overflow-hidden">
+                  <div
+                    className={`p-6 sm:p-10 text-center border-b border-slate-800 relative ${
+                      results.passed
+                        ? "bg-gradient-to-b from-emerald-950/50 to-transparent"
+                        : "bg-gradient-to-b from-rose-950/50 to-transparent"
+                    }`}
+                  >
+                    <div
+                      className={`w-16 h-16 rounded-sm mx-auto mb-5 flex items-center justify-center border-2 ${
+                        results.passed
+                          ? "bg-emerald-500/15 border-emerald-400 text-emerald-400 shadow-[4px_4px_0px_#10B981]"
+                          : "bg-rose-500/15 border-rose-500 text-rose-400 shadow-[4px_4px_0px_#F43F5E]"
+                      }`}
+                    >
+                      {results.passed ? (
+                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      )}
+                    </div>
+
+                    <span
+                      className={`inline-block px-3.5 py-1 rounded-xs font-mono text-xs font-bold uppercase tracking-widest border mb-3 ${
+                        results.passed
+                          ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/50"
+                          : "bg-rose-500/15 text-rose-300 border-rose-500/50"
+                      }`}
+                    >
+                      {results.passed ? "STATUS // APROVADO" : "STATUS // REPROVADO"}
+                    </span>
+
+                    <h2 className="font-display text-2xl sm:text-4xl font-bold text-white tracking-tight">
+                      {results.passed
+                        ? "Certificação Técnica Atingida"
+                        : "Pontuação Abaixo do Critério Mínimo"}
+                    </h2>
+                    <p className="font-mono text-xs sm:text-sm text-slate-400 mt-2">
+                      THRESHOLD EXIGIDO: {MIN_CORRECT_ANSWERS}/{totalQuestions} ACERTOS ({PASSING_PERCENTAGE}%)
+                    </p>
+                  </div>
+
+                  {/* Métricas de Pontuação */}
+                  <div className="p-6 sm:p-8">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                      <div className="p-4 rounded-sm bg-[#0B0D10] border border-slate-800 text-center">
+                        <div className="text-[11px] font-mono uppercase text-slate-400">Score Final</div>
+                        <div className="font-display text-2xl sm:text-3xl font-bold text-white mt-1">
+                          {results.score}<span className="text-base font-mono text-slate-500">/{totalQuestions}</span>
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-sm bg-[#0B0D10] border border-slate-800 text-center">
+                        <div className="text-[11px] font-mono uppercase text-slate-400">Aproveitamento</div>
+                        <div className={`font-display text-2xl sm:text-3xl font-bold mt-1 ${results.passed ? "text-emerald-400" : "text-rose-400"}`}>
+                          {results.percentage}%
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-sm bg-[#0B0D10] border border-slate-800 text-center">
+                        <div className="text-[11px] font-mono uppercase text-slate-400">Acertos</div>
+                        <div className="font-display text-2xl sm:text-3xl font-bold text-emerald-400 mt-1">
+                          {String(results.score).padStart(2, '0')}
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-sm bg-[#0B0D10] border border-slate-800 text-center">
+                        <div className="text-[11px] font-mono uppercase text-slate-400">Erros</div>
+                        <div className="font-display text-2xl sm:text-3xl font-bold text-rose-400 mt-1">
+                          {String(totalQuestions - results.score).padStart(2, '0')}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Desempenho por Tecnologia */}
+                    <div className="mb-8">
+                      <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                        &gt; Telemetria por Stack:
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {Object.entries(results.byCategory).map(([cat, stats]) => {
+                          const pct = Math.round((stats.correct / stats.total) * 100);
+                          const catTheme = TECH_THEME[cat];
+                          return (
+                            <div key={cat} className="p-4 rounded-sm border border-slate-800 bg-[#0B0D10]">
+                              <div className="flex items-center justify-between mb-3">
+                                <CategoryBadge category={cat} />
+                                <span className="font-mono text-xs font-bold text-white">
+                                  {stats.correct}/{stats.total} ({pct}%)
+                                </span>
+                              </div>
+                              <div className="w-full h-2 bg-slate-800 rounded-xs overflow-hidden">
+                                <div
+                                  className={`h-full ${catTheme.bar} transition-all duration-500`}
+                                  style={{ width: `${pct}%` }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Botões de Ação */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setShowReview((prev) => !prev)}
+                        className="btn-outline-cyber w-full sm:w-auto px-6 py-3.5 rounded-sm font-mono text-xs font-bold uppercase tracking-wider cursor-pointer"
+                      >
+                        {showReview ? "[-] Ocultar Gabarito" : "[+] Revisar Gabarito Comentado"}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleStartQuiz}
+                        className="btn-cyber w-full sm:w-auto px-7 py-3.5 rounded-sm font-display font-bold text-sm uppercase tracking-wider cursor-pointer"
+                      >
+                        Reiniciar Avaliação
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seção de Revisão Detalhada */}
+                {showReview && (
+                  <div className="space-y-4 fade-in">
+                    <div className="flex items-center justify-between px-1 pt-2">
+                      <h3 className="font-display text-xl font-bold text-white">
+                        Log de Revisão Técnica
+                      </h3>
+                      <span className="font-mono text-xs text-slate-400">
+                        TOTAL: {totalQuestions} REGISTROS
+                      </span>
+                    </div>
+
+                    {QUESTIONS_DATA.map((q, index) => {
+                      const selectedIdx = userAnswers[q.id];
+                      const isCorrect = selectedIdx === q.correctIndex;
+
+                      return (
+                        <div
+                          key={q.id}
+                          className={`bg-[#11151D] rounded-sm border p-5 sm:p-6 ${
+                            isCorrect ? "border-emerald-500/40" : "border-rose-500/40"
+                          }`}
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                            <div className="flex items-center gap-2.5">
+                              <span className="font-mono text-xs font-bold text-slate-400">
+                                Q.{String(index + 1).padStart(2, '0')}
+                              </span>
+                              <CategoryBadge category={q.category} />
+                            </div>
+                            <span
+                              className={`px-2.5 py-0.5 rounded-xs font-mono text-xs font-bold border ${
+                                isCorrect
+                                  ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/40"
+                                  : "bg-rose-500/15 text-rose-300 border-rose-500/40"
+                              }`}
+                            >
+                              {isCorrect ? "[OK] CORRETA" : "[ERR] INCORRETA"}
+                            </span>
+                          </div>
+
+                          <p className="font-display font-bold text-white text-base sm:text-lg mb-4">
+                            {q.question}
+                          </p>
+
+                          <div className="space-y-2 mb-4">
+                            {q.options.map((opt, optIdx) => {
+                              const isUserChoice = selectedIdx === optIdx;
+                              const isRightAnswer = q.correctIndex === optIdx;
+
+                              let boxStyle = "border-slate-800 bg-[#0B0D10] text-slate-400";
+                              let badgeStyle = "bg-slate-800 text-slate-400";
+
+                              if (isRightAnswer) {
+                                boxStyle = "border-emerald-500/70 bg-emerald-500/10 text-emerald-100 font-medium";
+                                badgeStyle = "bg-emerald-500 text-obsidian";
+                              } else if (isUserChoice && !isRightAnswer) {
+                                boxStyle = "border-rose-500/70 bg-rose-500/10 text-rose-100";
+                                badgeStyle = "bg-rose-500 text-white";
+                              }
+
+                              return (
+                                <div
+                                  key={optIdx}
+                                  className={`p-3 rounded-sm border text-sm flex items-start justify-between gap-3 ${boxStyle}`}
+                                >
+                                  <div className="flex items-start gap-3">
+                                    <span className={`w-6 h-6 rounded-xs flex items-center justify-center font-mono text-xs font-bold shrink-0 ${badgeStyle}`}>
+                                      {OPTION_LETTERS[optIdx]}
+                                    </span>
+                                    <span>{opt}</span>
+                                  </div>
+                                  <div className="shrink-0 font-mono text-[11px] font-bold uppercase">
+                                    {isRightAnswer && (
+                                      <span className="text-emerald-400">Gabarito</span>
+                                    )}
+                                    {isUserChoice && !isRightAnswer && (
+                                      <span className="text-rose-400">Sua Escolha</span>
+                                    )}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Explicação */}
+                          <div className="p-3.5 rounded-sm bg-[#0B0D10] border-l-2 border-slate-500 text-xs sm:text-sm text-slate-300">
+                            <strong className="font-mono text-white uppercase text-xs mr-1.5">
+                              Nota Técnica:
+                            </strong>
+                            {q.explanation}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          </main>
+
+          {/* Rodapé */}
+          <footer className="border-t border-slate-800/90 bg-[#0B0D10] py-5 mt-8">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-xs text-slate-500">
+              <span>PROJETO QUIZ FULLSTACK // REACT • TYPESCRIPT • NESTJS</span>
+              <span>APROVAÇÃO: {MIN_CORRECT_ANSWERS}/{totalQuestions} ({PASSING_PERCENTAGE}%)</span>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
