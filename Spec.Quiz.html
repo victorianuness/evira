@@ -58,7 +58,6 @@
       color: #F1F5F9;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
-      /* Textura autoral: Blueprint Grid duplo + pontos técnicos */
       background-image: 
         radial-gradient(rgba(0, 216, 255, 0.12) 1px, transparent 1px),
         linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
@@ -67,7 +66,6 @@
       background-position: -1px -1px, 0 0, 0 0;
     }
 
-    /* Cartão Neo-Brutalista Técnico com sombra sólida offset */
     .blueprint-card {
       background: linear-gradient(180deg, #141922 0%, #10141C 100%);
       border: 1.5px solid #2D3748;
@@ -75,7 +73,6 @@
       position: relative;
     }
 
-    /* Detalhes de mira/canto técnico (Crosshairs) */
     .corner-ticks::before,
     .corner-ticks::after {
       content: '';
@@ -97,7 +94,6 @@
       border-right: 2px solid #E0234E;
     }
 
-    /* Botão Principal com deslocamento físico ao clicar */
     .btn-cyber {
       background: #F8FAFC;
       color: #0B0D10;
@@ -121,7 +117,6 @@
       box-shadow: none;
     }
 
-    /* Botão Secundário Blueprint */
     .btn-outline-cyber {
       background: #12161D;
       color: #E2E8F0;
@@ -135,7 +130,6 @@
       box-shadow: 4px 4px 0px #334155;
     }
 
-    /* Alternativas Interativas */
     .option-tile {
       background: #0E1218;
       border: 1.5px solid #252E3D;
@@ -165,7 +159,6 @@
       transform: translate(-2px, -2px);
     }
 
-    /* Animação de entrada */
     .fade-in {
       animation: slideReveal 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -174,7 +167,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Scrollbar customizada */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #0B0D10; }
     ::-webkit-scrollbar-thumb { background: #2D3748; border-radius: 2px; }
@@ -194,286 +186,286 @@
       {
         id: 1,
         category: "TypeScript",
-        question: "Qual é a principal diferença entre 'interface' e 'type' (Type Alias) no TypeScript moderno?",
+        question: "O que o utilitário 'Omit<T, K>' faz no TypeScript?",
         options: [
-          "Interfaces não suportam propriedades opcionais, enquanto types suportam.",
-          "Interfaces permitem Declaration Merging (fusão de declarações com o mesmo nome), enquanto types não.",
-          "Types só podem representar tipos primitivos e nunca objetos.",
-          "Interfaces são compiladas para classes JavaScript em tempo de execução.",
-          "Não existe nenhuma diferença técnica ou semântica entre os dois."
+          "Remove as propriedades com valor null ou undefined de T.",
+          "Cria um tipo com todas as propriedades de T, exceto as chaves listadas em K.",
+          "Cria um tipo contendo apenas as chaves K de T.",
+          "Torna as propriedades K de T opcionais.",
+          "Apaga o tipo T do escopo global."
         ],
         correctIndex: 1,
-        explanation: "Interfaces podem ser declaradas múltiplas vezes no mesmo escopo e o TypeScript funde suas propriedades (Declaration Merging), o que é útil para estender tipos de bibliotecas."
+        explanation: "Omit<T, K> constrói um novo tipo a partir de T removendo as chaves K. É o oposto de Pick<T, K>, que mantém apenas as chaves informadas."
       },
       {
         id: 2,
         category: "TypeScript",
-        question: "Para que serve o Utility Type 'Partial<T>' no TypeScript?",
+        question: "Em qual situação o tipo 'never' é inferido ou utilizado?",
         options: [
-          "Torna todas as propriedades do tipo T obrigatórias.",
-          "Remove todas as propriedades nulas ou indefinidas de T.",
-          "Constrói um tipo com todas as propriedades de T definidas como opcionais.",
-          "Extrai apenas os métodos públicos de uma classe T.",
-          "Converte todas as propriedades de T em somente leitura (readonly)."
+          "Para valores que podem ser nulos em tempo de execução.",
+          "Para funções que retornam undefined implicitamente.",
+          "Para representar valores que nunca ocorrem, como o retorno de uma função que sempre lança exceção ou o caso exaustivo de um switch.",
+          "Para variáveis que ainda não foram inicializadas.",
+          "Para substituir o tipo 'any' de forma segura."
         ],
         correctIndex: 2,
-        explanation: "Partial<T> transforma todas as propriedades do tipo T em opcionais (?), sendo muito usado em operações de atualização parcial (PATCH/UPDATE)."
+        explanation: "'never' representa o conjunto vazio de valores. É útil em funções que nunca retornam e para checagem de exaustividade em unions discriminadas."
       },
       {
         id: 3,
         category: "TypeScript",
-        question: "Qual é a vantagem de utilizar o tipo 'unknown' em vez de 'any' quando não sabemos o tipo de um dado externo?",
+        question: "O que caracteriza uma 'Discriminated Union' (união discriminada)?",
         options: [
-          "O tipo 'unknown' permite chamar qualquer método diretamente sem verificação.",
-          "O tipo 'unknown' exige verificação ou narrowing de tipo antes de realizar operações com o valor.",
-          "O tipo 'unknown' é convertido automaticamente para string em tempo de execução.",
-          "O tipo 'unknown' ignora erros de sintaxe no arquivo inteiro.",
-          "Não há diferença; 'unknown' é apenas um apelido depreciado para 'any'."
+          "Uma union de tipos primitivos separados por vírgula.",
+          "Uma union cujos membros compartilham uma propriedade literal em comum (ex: 'kind'), permitindo ao compilador fazer narrowing ao verificá-la.",
+          "Uma union que só aceita valores numéricos.",
+          "Uma interface que herda de várias classes ao mesmo tempo.",
+          "Um enum com valores aleatórios gerados em runtime."
         ],
         correctIndex: 1,
-        explanation: "'unknown' é a contraparte type-safe do 'any'. Você pode atribuir qualquer valor a ele, mas não pode acessar propriedades ou invocá-lo sem antes validar seu tipo."
+        explanation: "Ao verificar a propriedade discriminante (ex: if (shape.kind === 'circle')), o TypeScript restringe automaticamente a union ao membro correspondente."
       },
       {
         id: 4,
         category: "TypeScript",
-        question: "O que o operador 'keyof' retorna quando aplicado a um tipo de objeto 'User'?",
+        question: "O que são 'Conditional Types' como 'T extends string ? \"sim\" : \"não\"'?",
         options: [
-          "Um array em tempo de execução contendo os valores das propriedades de User.",
-          "Uma union type literal contendo os nomes (chaves) das propriedades públicas de User.",
-          "O número total de propriedades definidas na interface User.",
-          "Uma cópia profunda (deep clone) da estrutura do tipo User.",
-          "Um booleano indicando se User possui propriedades privadas."
+          "Tipos que só existem quando uma variável de ambiente está definida.",
+          "Tipos que escolhem entre dois resultados com base em uma relação de assinabilidade entre tipos, resolvida em tempo de compilação.",
+          "Blocos if/else que são executados em runtime pelo V8.",
+          "Decorators que validam o valor de uma propriedade.",
+          "Um recurso exclusivo para classes abstratas."
         ],
         correctIndex: 1,
-        explanation: "O operador 'keyof T' produz uma união de strings ou símbolos literais representando todas as chaves conhecidas de T."
+        explanation: "Conditional types permitem expressar lógica no nível de tipos (T extends U ? X : Y) e são a base de utilitários como Exclude, Extract e ReturnType."
       },
       {
         id: 5,
         category: "TypeScript",
-        question: "Qual recurso do TypeScript permite criar componentes, funções e classes reutilizáveis que preservam a tipagem de entrada na saída?",
+        question: "Qual é o benefício do operador 'satisfies' (TypeScript 4.9+)?",
         options: [
-          "Decorators",
-          "Namespaces",
-          "Generics (<T>)",
-          "Mixins",
-          "Enums"
+          "Valida o objeto em runtime e lança erro se estiver incorreto.",
+          "Converte o valor para o tipo informado, ignorando incompatibilidades.",
+          "Verifica se a expressão é compatível com um tipo sem alargar o tipo inferido, preservando a inferência mais específica.",
+          "Torna todas as propriedades do objeto readonly.",
+          "Permite importar tipos de outros pacotes sem instalá-los."
         ],
         correctIndex: 2,
-        explanation: "Generics (<T>) funcionam como variáveis de tipo, permitindo criar estruturas flexíveis sem perder a segurança de tipos (type safety)."
+        explanation: "Com 'satisfies' você garante conformidade com um tipo, mas mantém os tipos literais e específicos inferidos, algo que uma anotação de tipo comum perderia."
       },
       {
         id: 6,
         category: "TypeScript",
-        question: "O que faz o modificador 'readonly' em uma propriedade de interface ou classe no TypeScript?",
+        question: "O que a opção 'strictNullChecks' do tsconfig faz?",
         options: [
-          "Criptografa o valor da propriedade na memória.",
-          "Impede que a propriedade seja reatribuída após a sua inicialização durante a verificação de tipos.",
-          "Torna a propriedade privada e inacessível fora da classe.",
-          "Garante que objetos aninhados dentro da propriedade sejam profundamente imutáveis em runtime.",
-          "Exporta a propriedade automaticamente para outros módulos."
+          "Remove automaticamente valores null do código compilado.",
+          "Faz com que null e undefined deixem de ser atribuíveis a todos os tipos, exigindo tratamento explícito.",
+          "Impede o uso da palavra-chave null em qualquer arquivo.",
+          "Converte undefined em null durante o build.",
+          "Ativa a verificação de nulos apenas em arquivos .js."
         ],
         correctIndex: 1,
-        explanation: "'readonly' garante em tempo de compilação que a referência da propriedade não seja alterada após a inicialização."
+        explanation: "Com strictNullChecks ativo, 'string' não aceita mais null/undefined; é preciso declarar 'string | null' e tratar o caso, eliminando uma classe inteira de erros."
       },
       {
         id: 7,
         category: "TypeScript",
-        question: "Qual é a função de um 'Type Guard' (como o operador 'typeof', 'instanceof' ou predicados 'x is Tipo')?",
+        question: "O que o modificador 'as const' faz em um literal de objeto, como 'const cfg = { mode: \"dark\" } as const'?",
         options: [
-          "Bloquear requisições HTTP não autenticadas no backend.",
-          "Restringir (narrow) um tipo mais amplo (como union types) para um tipo mais específico dentro de um bloco condicional.",
-          "Converter código TypeScript diretamente para WebAssembly.",
-          "Remover comentários e espaços em branco durante o build.",
-          "Gerar documentação automática em Swagger/OpenAPI."
+          "Congela o objeto em runtime com Object.freeze.",
+          "Converte o objeto em uma classe imutável.",
+          "Infere os valores como tipos literais e marca as propriedades como readonly, apenas em tempo de compilação.",
+          "Impede que a variável cfg seja importada em outros arquivos.",
+          "Transforma o objeto em um enum."
         ],
-        correctIndex: 1,
-        explanation: "Type Guards permitem que o compilador do TypeScript entenda qual é o tipo específico de uma variável dentro de um bloco if/switch."
+        correctIndex: 2,
+        explanation: "'as const' faz com que mode seja inferido como o literal \"dark\" (e não string) e readonly. Não há nenhum efeito em runtime."
       },
 
       // --- NESTJS (7 questões) ---
       {
         id: 8,
         category: "NestJS",
-        question: "Qual padrão arquitetural é a base central do NestJS para gerenciar dependências entre Services, Controllers e outros componentes?",
+        question: "Qual é o escopo padrão (lifetime) de um provider no NestJS?",
         options: [
-          "Singleton Manual Global",
-          "Injeção de Dependência (Dependency Injection) e Inversão de Controle (IoC)",
-          "Event Sourcing Puro",
-          "Active Record Pattern obrigatório",
-          "Observer Pattern sem decoradores"
+          "Request: uma nova instância é criada para cada requisição.",
+          "Transient: uma nova instância é criada para cada consumidor.",
+          "Singleton: uma única instância é compartilhada por toda a aplicação.",
+          "Session: uma instância por usuário autenticado.",
+          "Lazy: instanciado apenas na primeira chamada e descartado depois."
         ],
-        correctIndex: 1,
-        explanation: "O NestJS possui um container de IoC integrado que gerencia a instanciação e injeção de dependências (Providers) automaticamente via construtor."
+        correctIndex: 2,
+        explanation: "Por padrão, providers são singletons compartilhados. Escopos REQUEST e TRANSIENT existem, mas têm custo de performance e devem ser usados só quando necessário."
       },
       {
         id: 9,
         category: "NestJS",
-        question: "Qual é a responsabilidade principal de um 'Controller' no NestJS?",
+        question: "Qual é a ordem correta de execução dos componentes no ciclo de vida de uma requisição no NestJS?",
         options: [
-          "Executar queries SQL diretamente no banco de dados.",
-          "Gerenciar variáveis de ambiente e conexões WebSocket exclusivamente.",
-          "Receber requisições HTTP de entrada, extrair parâmetros e retornar respostas ao cliente.",
-          "Compilar arquivos TypeScript para JavaScript.",
-          "Armazenar o estado global da aplicação em memória."
+          "Pipes → Guards → Middleware → Interceptors → Handler",
+          "Guards → Middleware → Pipes → Interceptors → Handler",
+          "Interceptors → Middleware → Guards → Pipes → Handler",
+          "Middleware → Guards → Interceptors (antes) → Pipes → Handler",
+          "Handler → Middleware → Guards → Pipes → Interceptors"
         ],
-        correctIndex: 2,
-        explanation: "Controllers são responsáveis por lidar com as rotas HTTP (@Get, @Post, etc.), delegando regras de negócio complexas para os Services."
+        correctIndex: 3,
+        explanation: "A ordem é: Middleware, Guards, Interceptors (pré-handler), Pipes, Handler, Interceptors (pós-handler) e, por fim, Exception Filters em caso de erro."
       },
       {
         id: 10,
         category: "NestJS",
-        question: "Qual decorator é utilizado para marcar uma classe como um Provider que pode ser gerenciado pelo sistema de injeção de dependência do NestJS?",
+        question: "O que o decorator @Global() faz em um módulo NestJS?",
         options: [
-          "@Module()",
-          "@Controller()",
-          "@Injectable()",
-          "@InjectRepository()",
-          "@Component()"
+          "Faz o módulo ser carregado antes de todos os outros.",
+          "Expõe os providers exportados do módulo para toda a aplicação, sem precisar importá-lo em cada módulo consumidor.",
+          "Transforma todos os controllers do módulo em rotas públicas, sem autenticação.",
+          "Compartilha o módulo entre diferentes aplicações NestJS.",
+          "Desativa o encapsulamento de providers dentro do módulo."
         ],
-        correctIndex: 2,
-        explanation: "O decorator @Injectable() anexa metadados que informam ao NestJS que a classe pode ser instanciada e injetada pelo container IoC."
+        correctIndex: 1,
+        explanation: "Um módulo @Global() só precisa ser importado uma vez (geralmente no AppModule); seus exports ficam disponíveis em todos os módulos. Deve ser usado com moderação."
       },
       {
         id: 11,
         category: "NestJS",
-        question: "No ciclo de vida de uma requisição no NestJS, qual componente é comumente utilizado para validar e transformar dados de entrada (como DTOs)?",
+        question: "Qual é o papel de um Exception Filter no NestJS?",
         options: [
-          "Guards",
-          "Pipes (ex: ValidationPipe)",
-          "Interceptors",
-          "Exception Filters",
-          "Middlewares"
+          "Validar o corpo da requisição com class-validator.",
+          "Capturar exceções lançadas durante o processamento e controlar a resposta de erro enviada ao cliente.",
+          "Filtrar quais rotas aparecem na documentação Swagger.",
+          "Impedir que exceções sejam lançadas dentro de services.",
+          "Registrar apenas métricas de performance."
         ],
         correctIndex: 1,
-        explanation: "Pipes operam nos argumentos enviados ao handler da rota, sendo ideais para transformação de tipos (ParseIntPipe) e validação de DTOs (ValidationPipe)."
+        explanation: "Exception Filters (@Catch) interceptam exceções, permitindo padronizar o formato de erro, registrar logs e mapear exceções de domínio para status HTTP."
       },
       {
         id: 12,
         category: "NestJS",
-        question: "Qual é a principal finalidade de um 'Guard' (ex: AuthGuard) no NestJS?",
+        question: "Para que serve um custom provider com 'useFactory' no NestJS?",
         options: [
-          "Formatar o JSON de saída antes de enviar ao cliente.",
-          "Capturar exceções não tratadas e retornar status HTTP 500.",
-          "Determinar se uma requisição deve ou não ser processada pelo handler da rota com base em permissões/autenticação.",
-          "Realizar cache de respostas no Redis.",
-          "Mapear entidades do TypeORM para tabelas."
+          "Para criar controllers dinamicamente a partir de arquivos JSON.",
+          "Para criar o provider por meio de uma função (podendo ser assíncrona e injetar outras dependências), útil em conexões e configurações dinâmicas.",
+          "Para substituir o container de IoC do NestJS por outro framework.",
+          "Para gerar migrations de banco de dados automaticamente.",
+          "Para registrar rotas em tempo de execução."
         ],
-        correctIndex: 2,
-        explanation: "Guards têm uma responsabilidade única: autorização/autenticação. Eles retornam um booleano indicando se a requisição pode prosseguir."
+        correctIndex: 1,
+        explanation: "'useFactory' recebe dependências via 'inject' e retorna o valor do provider, inclusive de forma assíncrona, como em conexões com banco ou clientes externos."
       },
       {
         id: 13,
         category: "NestJS",
-        question: "Como o NestJS organiza a estrutura modular da aplicação e encapsula providers?",
+        question: "O que é um 'Dynamic Module' (ex: ConfigModule.forRoot()) no NestJS?",
         options: [
-          "Através de arquivos package.json aninhados.",
-          "Através de classes decoradas com @Module(), definindo imports, controllers, providers e exports.",
-          "Por meio de convenção rígida de nomes de pastas sem decorators.",
-          "Usando apenas funções exportadas em um único arquivo main.ts.",
-          "Através de XML de configuração."
+          "Um módulo que é recarregado automaticamente quando o arquivo muda.",
+          "Um módulo cujos providers e imports são definidos em tempo de configuração, por meio de um método estático que retorna a definição do módulo.",
+          "Um módulo que só é carregado quando a primeira requisição chega.",
+          "Um módulo escrito em JavaScript puro, sem decorators.",
+          "Um módulo que não pode ter controllers."
         ],
         correctIndex: 1,
-        explanation: "Módulos (@Module) organizam o código em domínios coesos. Para que um provider seja usado em outro módulo, ele precisa ser listado em 'exports'."
+        explanation: "Dynamic modules permitem parametrizar o módulo (forRoot, forRootAsync, register), retornando um objeto com module, providers, imports e exports."
       },
       {
         id: 14,
         category: "NestJS",
-        question: "Qual recurso do NestJS permite interceptar a execução antes e depois do método do controller, permitindo transformar a resposta ou medir o tempo de execução?",
+        question: "Qual recurso resolve dependências circulares entre dois providers no NestJS?",
         options: [
-          "Pipes",
-          "Interceptors (baseados em RxJS Observables)",
-          "DTOs",
-          "Guards",
-          "Entities"
+          "@Optional()",
+          "@Global()",
+          "forwardRef() combinado com @Inject()",
+          "@Self()",
+          "ModuleRef.destroy()"
         ],
-        correctIndex: 1,
-        explanation: "Interceptors envolvem a execução da requisição/resposta utilizando RxJS, permitindo logging, transformação de resposta e tratamento de timeout."
+        correctIndex: 2,
+        explanation: "forwardRef() adia a resolução da referência, permitindo que duas classes (ou módulos) dependam uma da outra. Ainda assim, uma dependência circular costuma indicar problema de design."
       },
 
       // --- REACT (6 questões) ---
       {
         id: 15,
         category: "React",
-        question: "Qual é o comportamento correto do hook 'useEffect' quando passado um array de dependências vazio '[]'?",
+        question: "Qual é o principal objetivo do hook 'useCallback'?",
         options: [
-          "Executa o efeito a cada nova renderização do componente.",
-          "Nunca executa o efeito, nem mesmo na montagem.",
-          "Executa o efeito apenas uma vez após a montagem inicial do componente (mount).",
-          "Executa o efeito apenas quando o usuário clica em algum botão.",
-          "Causa um erro de compilação no React 18+."
+          "Executar uma função assim que o componente for montado.",
+          "Manter a mesma referência de uma função entre renderizações enquanto suas dependências não mudarem.",
+          "Armazenar o resultado de uma requisição HTTP.",
+          "Substituir o uso de props em componentes filhos.",
+          "Disparar uma nova renderização de forma síncrona."
         ],
-        correctIndex: 2,
-        explanation: "Um array de dependências vazio [] indica que o efeito não depende de nenhum valor de props ou state, rodando apenas uma vez na montagem (e limpando no unmount)."
+        correctIndex: 1,
+        explanation: "useCallback memoriza a função em si. É útil ao passar callbacks para componentes envolvidos em React.memo ou para dependências estáveis de useEffect."
       },
       {
         id: 16,
         category: "React",
-        question: "Por que não devemos modificar o estado diretamente no React (ex: state.count = 5) em vez de usar a função atualizadora (setState)?",
+        question: "Quando a função de limpeza (cleanup) retornada por um useEffect é executada?",
         options: [
-          "Porque o JavaScript proíbe mutação de objetos em modo estrito.",
-          "Porque a mutação direta não dispara uma nova renderização (re-render) e quebra a imutabilidade esperada pelo React.",
-          "Porque o método setState salva os dados automaticamente no localStorage.",
-          "Porque modificar diretamente apaga o Virtual DOM inteiro.",
-          "Porque apenas variáveis globais podem ser alteradas diretamente."
+          "Apenas quando a página é fechada pelo navegador.",
+          "Antes de o efeito rodar novamente (quando as dependências mudam) e quando o componente é desmontado.",
+          "Somente na primeira renderização.",
+          "Nunca, a menos que se use useLayoutEffect.",
+          "Imediatamente após cada chamada de setState, em qualquer componente."
         ],
         correctIndex: 1,
-        explanation: "O React compara referências de estado para saber quando atualizar a interface. Chamar a função setter agenda a re-renderização com o novo estado."
+        explanation: "O cleanup serve para cancelar subscriptions, timers e listeners. Ele roda antes da próxima execução do efeito e no unmount."
       },
       {
         id: 17,
         category: "React",
-        question: "Qual é a importância da prop 'key' ao renderizar listas de elementos com '.map()' no React?",
+        question: "O que o 'React.memo' faz ao envolver um componente funcional?",
         options: [
-          "Serve para aplicar estilos CSS automaticamente aos itens ímpares.",
-          "Ajuda o algoritmo de reconciliação do React a identificar quais itens foram alterados, adicionados ou removidos com eficiência.",
-          "É obrigatória apenas quando a lista tem mais de 100 itens.",
-          "Define a ordem alfabética de exibição dos elementos na tela.",
-          "Envia o identificador único automaticamente para o backend."
+          "Salva o estado do componente no localStorage.",
+          "Evita que o componente seja renderizado novamente se suas props não mudaram (comparação rasa).",
+          "Impede que o componente receba qualquer prop nova.",
+          "Faz o componente ser renderizado apenas no servidor.",
+          "Transforma o componente em um hook personalizado."
         ],
         correctIndex: 1,
-        explanation: "Keys estáveis e únicas permitem que o React preserve o estado interno dos componentes da lista e evite recriações desnecessárias no DOM."
+        explanation: "React.memo compara as props anteriores e novas de forma rasa e pula a re-renderização se forem iguais. Props de objetos/funções precisam de referências estáveis para funcionar bem."
       },
       {
         id: 18,
         category: "React",
-        question: "Qual hook do React é indicado para memorizar o resultado de um cálculo computacionalmente caro entre renderizações?",
+        question: "Qual é a diferença entre um componente controlado e um não controlado em formulários?",
         options: [
-          "useRef",
-          "useMemo",
-          "useContext",
-          "useReducer",
-          "useLayoutEffect"
+          "Controlados só funcionam com inputs de texto; não controlados só com checkbox.",
+          "No controlado o valor do input vem do estado do React (value + onChange); no não controlado o DOM mantém o valor e ele é lido via ref.",
+          "No controlado o valor fica salvo no servidor; no não controlado fica no localStorage.",
+          "Não há diferença prática entre os dois.",
+          "Componentes não controlados exigem Redux."
         ],
         correctIndex: 1,
-        explanation: "useMemo armazena em cache o resultado de uma função e só o recalcula quando uma de suas dependências sofrer alteração."
+        explanation: "Em inputs controlados, o React é a 'fonte da verdade' do valor. Em não controlados, o próprio DOM guarda o valor e você o acessa quando necessário (ex: via useRef)."
       },
       {
         id: 19,
         category: "React",
-        question: "Sobre o hook 'useRef', qual afirmação é verdadeira?",
+        question: "Por que, em desenvolvimento, o <React.StrictMode> (React 18) executa os efeitos duas vezes na montagem?",
         options: [
-          "Alterar 'ref.current' dispara imediatamente uma nova renderização do componente.",
-          "Pode ser usado tanto para acessar elementos do DOM diretamente quanto para guardar valores mutáveis que persistem entre renderizações sem causar re-render.",
-          "Só pode ser utilizado em componentes de classe.",
-          "Substitui completamente a necessidade de usar useState.",
-          "É apagado toda vez que o componente recebe novas props."
+          "É um bug conhecido do React 18 que será corrigido.",
+          "Para simular desmontagem e remontagem, ajudando a detectar efeitos sem cleanup adequado ou com efeitos colaterais impuros.",
+          "Para dobrar a performance do componente em produção.",
+          "Porque o Babel compila o código duas vezes.",
+          "Para sincronizar o estado com o servidor."
         ],
         correctIndex: 1,
-        explanation: "useRef retorna um objeto mutável { current: initialValue } que permanece o mesmo durante todo o ciclo de vida do componente sem provocar re-renderizações."
+        explanation: "O StrictMode só afeta o ambiente de desenvolvimento. A dupla execução expõe efeitos que não são resilientes a montar/desmontar, preparando o código para recursos concorrentes."
       },
       {
         id: 20,
         category: "React",
-        question: "O que significa o conceito de 'Lifting State Up' (Elevar o Estado) no React?",
+        question: "Quando 'useReducer' costuma ser mais adequado do que 'useState'?",
         options: [
-          "Mover todos os estados da aplicação para variáveis globais fora do React.",
-          "Mover o estado compartilhado para o ancestral comum mais próximo dos componentes que precisam sincronizar esses dados.",
-          "Salvar todos os formulários na nuvem antes de validar.",
-          "Converter componentes funcionais em componentes de classe.",
-          "Utilizar apenas CSS Grid para posicionar elementos no topo da tela."
+          "Quando o estado é um único valor booleano.",
+          "Quando o estado é complexo, com várias sub-partes ou transições que dependem do estado anterior, centralizando a lógica em um reducer.",
+          "Quando se deseja evitar completamente re-renderizações.",
+          "Quando o componente é uma classe.",
+          "Quando o estado precisa ser compartilhado entre abas do navegador."
         ],
         correctIndex: 1,
-        explanation: "Como o fluxo de dados no React é unidirecional (top-down), elevar o estado ao ancestral comum permite compartilhar e sincronizar dados entre componentes irmãos via props."
+        explanation: "useReducer centraliza transições de estado em uma função pura (state, action) → novo state, o que facilita testes e deixa a lógica mais previsível em estados complexos."
       }
     ];
 
@@ -509,7 +501,6 @@
       }
     };
 
-    // Badge de Categoria Estilo Blueprint
     function CategoryBadge({ category, showTagCode = false }) {
       const theme = TECH_THEME[category] || TECH_THEME.TypeScript;
       return (
@@ -524,17 +515,15 @@
     }
 
     function App() {
-      // Estados principais da aplicação
       const [screen, setScreen] = useState('start'); // 'start' | 'quiz' | 'result'
       const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-      const [userAnswers, setUserAnswers] = useState({}); // { [questionId]: optionIndex }
+      const [userAnswers, setUserAnswers] = useState({});
       const [showReview, setShowReview] = useState(false);
 
       const totalQuestions = QUESTIONS_DATA.length;
       const currentQuestion = QUESTIONS_DATA[currentQuestionIndex];
       const answeredCount = Object.keys(userAnswers).length;
 
-      // Inicia ou reinicia o quiz
       const handleStartQuiz = () => {
         setUserAnswers({});
         setCurrentQuestionIndex(0);
@@ -542,7 +531,6 @@
         setScreen('quiz');
       };
 
-      // Registra a resposta da questão atual
       const handleSelectOption = (optionIndex) => {
         setUserAnswers((prev) => ({
           ...prev,
@@ -550,7 +538,6 @@
         }));
       };
 
-      // Navegação entre questões
       const handleNext = () => {
         if (currentQuestionIndex < totalQuestions - 1) {
           setCurrentQuestionIndex((prev) => prev + 1);
@@ -565,7 +552,6 @@
         }
       };
 
-      // Cálculo de pontuação e desempenho por tecnologia
       const results = useMemo(() => {
         let score = 0;
         const byCategory = {
@@ -592,7 +578,6 @@
 
       return (
         <div className="min-h-screen flex flex-col">
-          {/* Cabeçalho Superior Técnico */}
           <header className="bg-[#0B0D10]/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-20">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -627,7 +612,6 @@
             </div>
           </header>
 
-          {/* Conteúdo Principal */}
           <main className="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col justify-center">
             
             {/* TELA 1: INÍCIO */}
@@ -651,7 +635,6 @@
                   Valide seu domínio em tipagem estática avançada com <span className="text-[#66A8F5] font-medium">TypeScript</span>, injeção de dependência e arquitetura modular com <span className="text-[#FF6B8B] font-medium">NestJS</span>, e renderização reativa com <span className="text-[#5CE6FF] font-medium">React</span>.
                 </p>
 
-                {/* Grid de Especificações Técnicas */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                   <div className="p-4 rounded-sm bg-[#0C0F14] border border-slate-800 relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-0.5 bg-ts"></div>
@@ -693,7 +676,6 @@
                   </div>
                 </div>
 
-                {/* Protocolo da Avaliação */}
                 <div className="bg-[#0C0F14] border-l-4 border-react p-5 mb-8">
                   <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-react mb-3">
                     &gt; Protocolo de Execução:
@@ -731,7 +713,6 @@
             {/* TELA 2: QUIZ EM ANDAMENTO */}
             {screen === 'quiz' && (
               <div className="fade-in">
-                {/* Barra de Progresso Segmentada por Tecnologia (20 blocos) */}
                 <div className="mb-6 bg-[#11151D] border border-slate-800 p-3.5 rounded-sm">
                   <div className="flex justify-between items-center text-xs font-mono text-slate-400 mb-2.5">
                     <span>PROGRESSO DA SESSÃO // {activeTheme.code}</span>
@@ -763,7 +744,6 @@
                   </div>
                 </div>
 
-                {/* Card da Questão */}
                 <div className="blueprint-card corner-ticks rounded-sm p-6 sm:p-8">
                   <div className="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-800">
                     <CategoryBadge category={currentQuestion.category} showTagCode={true} />
@@ -779,7 +759,6 @@
                     {currentQuestion.question}
                   </h3>
 
-                  {/* Lista de 5 Alternativas */}
                   <div className="space-y-3" role="radiogroup" aria-label="Alternativas da questão">
                     {currentQuestion.options.map((optionText, idx) => {
                       const isSelected = userAnswers[currentQuestion.id] === idx;
@@ -809,7 +788,6 @@
                     })}
                   </div>
 
-                  {/* Navegação Inferior */}
                   <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
                     <button
                       type="button"
@@ -840,7 +818,6 @@
                   </div>
                 </div>
 
-                {/* Matriz de Navegação Rápida */}
                 <div className="mt-6 bg-[#11151D] rounded-sm border border-slate-800 p-4">
                   <div className="flex items-center justify-between mb-3">
                     <p className="text-xs font-mono uppercase tracking-wider text-slate-400">
@@ -882,7 +859,6 @@
             {/* TELA 3: RESULTADO E REVISÃO */}
             {screen === 'result' && (
               <div className="space-y-6 fade-in">
-                {/* Card Principal de Resultado */}
                 <div className="blueprint-card corner-ticks rounded-sm overflow-hidden">
                   <div
                     className={`p-6 sm:p-10 text-center border-b border-slate-800 relative ${
@@ -929,7 +905,6 @@
                     </p>
                   </div>
 
-                  {/* Métricas de Pontuação */}
                   <div className="p-6 sm:p-8">
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
                       <div className="p-4 rounded-sm bg-[#0B0D10] border border-slate-800 text-center">
@@ -961,7 +936,6 @@
                       </div>
                     </div>
 
-                    {/* Desempenho por Tecnologia */}
                     <div className="mb-8">
                       <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
                         &gt; Telemetria por Stack:
@@ -990,7 +964,6 @@
                       </div>
                     </div>
 
-                    {/* Botões de Ação */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                       <button
                         type="button"
@@ -1011,7 +984,6 @@
                   </div>
                 </div>
 
-                {/* Seção de Revisão Detalhada */}
                 {showReview && (
                   <div className="space-y-4 fade-in">
                     <div className="flex items-center justify-between px-1 pt-2">
@@ -1096,7 +1068,6 @@
                             })}
                           </div>
 
-                          {/* Explicação */}
                           <div className="p-3.5 rounded-sm bg-[#0B0D10] border-l-2 border-slate-500 text-xs sm:text-sm text-slate-300">
                             <strong className="font-mono text-white uppercase text-xs mr-1.5">
                               Nota Técnica:
@@ -1112,7 +1083,6 @@
             )}
           </main>
 
-          {/* Rodapé */}
           <footer className="border-t border-slate-800/90 bg-[#0B0D10] py-5 mt-8">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 font-mono text-xs text-slate-500">
               <span>PROJETO QUIZ FULLSTACK // REACT • TYPESCRIPT • NESTJS</span>
